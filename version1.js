@@ -28,7 +28,7 @@ function menu() {
               editar();
               break;
           case '4':
-              concluir();
+              concluirTarefa();
               break;
           case '5':
               rl.close();
