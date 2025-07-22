@@ -24,13 +24,13 @@ function menu() {
               criarLembrete();
               break;
           case '2':
-              ListarLembretes();
+              listarLembretes();
               break;
           case '3':
               editarLembrete();
               break;
           case '4':
-              concluirTarefa();
+              concluirLembrete();
               break;
           case '5':
               rl.close();
@@ -64,37 +64,34 @@ function criarLembrete() {
   });
 }
 
-// Função listar lembrete
-
-function ListarLembretes() {
+function listarLembretes() {
   if (lembretes.length === 0) {
       console.log('Nenhum lembrete adicionado.');
   } else {
       console.log('\n=== LISTA DE LEMBRETES ===');
       lembretes.forEach((lembrete, index) => {
+          const status = lembrete.concluido ? 'Concluído' : 'Pendente';
           console.log(
-              `${index + 1}. Nome: ${lembrete.nome} | Prazo: ${lembrete.prazo} | Concluído: ${LembreteConcluído.resposta}`
+              `${index + 1}. Lembrete: ${lembrete.adicionar} | Prazo: ${lembrete.prazo} | Status: ${status}`
           );
       });
   }
 
-console.log('\n Pressione Enter para voltar ao menu principal.');
-  rl.question('', mostrarMenu);
-  }
-
-// Função editar lembrete
+  console.log('\nPressione Enter para voltar ao menu principal.');
+  rl.question('', () => menu()); // Use a callback function for rl.question
+}
 
 function editarLembrete() {
-  if (lembrete.length === 0) {
+  if (lembretes.length === 0) {
     console.log('Nenhum lembrete cadastrado para editar.');
     console.log('\nPressione Enter para voltar ao menu...');
-    return rl.question('', mostrarMenu);
+    return rl.question('', () => menu());
   }
 
   console.log('\n=== LEMBRETES CADASTRADOS ===');
   lembretes.forEach((lembrete, index) => {
     console.log(
-      `${index + 1}. Texto: ${lembrete.texto} | Prazo: ${lembrete.prazo} `
+      `${index + 1}. Lembrete: ${lembrete.adicionar} | Prazo: ${lembrete.prazo} `
     );
   });
 
@@ -104,60 +101,53 @@ function editarLembrete() {
     if (index < 0 || index >= lembretes.length) {
       console.log('Número inválido!');
       console.log('\nPressione Enter para voltar ao menu...');
-      return rl.question('', mostrarMenu);
+      return rl.question('', () => menu());
     }
 
-    rl.question('Digite o novo lembrete: ', (texto) => {
-      rl.question('Digite o novo prazo do lembrete: ', (prazo) => {
-            console.log('Lembrete inválido.');
-            return editarLembrete();
-      });
-      
-          lembretes[index] = {
-            texto,
-            prazo,
-          };
+    rl.question('Digite o novo lembrete: ', (novoAdicionar) => {
+      rl.question('Digite o novo prazo do lembrete: ', (novoPrazo) => {
+          lembretes[index].adicionar = novoAdicionar;
+          lembretes[index].prazo = novoPrazo;
 
           console.log('Lembrete editado com sucesso!');
           console.log('\nPressione Enter para voltar ao menu...');
-          rl.question('', mostrarMenu);
+          rl.question('', () => menu());
         });
       });
-    };
+    });
+}
 
-console.log('=== SISTEMA DE GERENCIAMENTO DE LEMBRETES ===');
-mostrarMenu();
-
-function concluirTarefa() {
-    if (lista.length === 0) {
-      console.log('Nenhuma tarefa foi criada.')
-      console.log('\nPressione Enter para voltar ao menu.')
-      return rl.question('', mostrarMenu)
+function concluirLembrete() {
+    if (lembretes.length === 0) {
+      console.log('Nenhum lembrete foi criado.');
+      console.log('\nPressione Enter para voltar ao menu.');
+      return rl.question('', () => menu());
     }
 
-
-    console.log('\n=== LEMBRETES ===')
-    lista.forEach((lembrete, index) => {
+    console.log('\n=== LEMBRETES ===');
+    lembretes.forEach((lembrete, index) => {
+      const status = lembrete.concluido ? 'Concluído' : 'Pendente';
       console.log(
-        `${index + 1}. Tarefa: ${lembrete.tarefa} | Prazo: ${lembrete.prazo} | Status: ${lembrete.status}`
-      )
-    })
- 
-    rl.question('\nDigite o número da tarefa que deseja marcar como concluida: ', (num) => {
-      const index = parseInt(num, 10) - 1
- 
-      if (index < 0 || index >= lista.length) {
-        console.log('Essa tarefa não existe!')
-        console.log('\nPressione Enter para voltar ao menu...')
-        return rl.question('', mostrarMenu)
+        `${index + 1}. Lembrete: ${lembrete.adicionar} | Prazo: ${lembrete.prazo} | Status: ${status}`
+      );
+    });
+
+    rl.question('\nDigite o número do lembrete que deseja marcar como concluído: ', (num) => {
+      const index = parseInt(num, 10) - 1;
+
+      if (index < 0 || index >= lembretes.length) {
+        console.log('Esse lembrete não existe!');
+        console.log('\nPressione Enter para voltar ao menu...');
+        return rl.question('', () => menu());
       } else {
-        lista[index].status = true
+        lembretes[index].concluido = true;
 
-
-        console.log('Status editado com sucesso!')
-        console.log('\nPressione Enter para voltar ao menu...')
-        rl.question('', mostrarMenu)
+        console.log('Status editado com sucesso!');
+        console.log('\nPressione Enter para voltar ao menu...');
+        rl.question('', () => menu());
       }
-    })
+    });
 }
+
+console.log('=== SISTEMA DE GERENCIAMENTO DE LEMBRETES ===');
 menu();
