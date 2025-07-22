@@ -40,7 +40,7 @@ function menu() {
       }
   });
 }
-
+//po
 function criarLembrete() {
   rl.question('Digite o lembrete que você queira adicionar: ', (adicionar) => {
       rl.question('Escolha o prazo do seu lembrete: ', (prazo) => {
