@@ -62,4 +62,36 @@ function criarLembrete() {
   });
 }
 
+function concluirTarefa() {
+    if (lista.length === 0) {
+      console.log('Nenhuma tarefa foi criada.')
+      console.log('\nPressione Enter para voltar ao menu.')
+      return rl.question('', mostrarMenu)
+    }
+
+
+    console.log('\n=== LEMBRETES ===')
+    lista.forEach((lembrete, index) => {
+      console.log(
+        `${index + 1}. Tarefa: ${lembrete.tarefa} | Prazo: ${lembrete.prazo} | Status: ${lembrete.status}`
+      )
+    })
+ 
+    rl.question('\nDigite o número da tarefa que deseja marcar como concluida: ', (num) => {
+      const index = parseInt(num, 10) - 1
+ 
+      if (index < 0 || index >= lista.length) {
+        console.log('Essa tarefa não existe!')
+        console.log('\nPressione Enter para voltar ao menu...')
+        return rl.question('', mostrarMenu)
+      } else {
+        lista[index].status = true
+
+
+        console.log('Status editado com sucesso!')
+        console.log('\nPressione Enter para voltar ao menu...')
+        rl.question('', mostrarMenu)
+      }
+    })
+}
 menu();
